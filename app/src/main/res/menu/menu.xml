@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_logout"
+        android:title="Déconnexion" />
+
+    <item
+        android:id="@+id/action_shopping_list"
+        android:title="shopping_list"
+        android:icon="@drawable/ic_shopping_cart_black_24dp"
+        app:showAsAction="always"/>
+</menu>
