@@ -1,14 +1,12 @@
 package com.example.nicolas.ihm;
 
-import java.util.HashMap;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-public class SessionManager {
+class SessionManager {
     // Shared Preferences
     private SharedPreferences pref;
 
@@ -70,19 +68,6 @@ public class SessionManager {
             _context.startActivity(i);
         }
 
-    }
-
-    /**
-     * Get stored session data
-     * */
-    public HashMap<String, String> getUserDetails(){
-        HashMap<String, String> user = new HashMap<>();
-
-        // user name
-        user.put(KEY_NAME, pref.getString(KEY_NAME, null));
-
-        // return user
-        return user;
     }
 
     /**

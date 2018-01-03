@@ -7,9 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity {
     private SessionManager session;
@@ -25,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         /* Création du menu */
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Liste de courses");
+        toolbar.setTitle("Agenda familial");
         setSupportActionBar(toolbar);
 
         ImageView planning = findViewById(R.id.imagePlanning);

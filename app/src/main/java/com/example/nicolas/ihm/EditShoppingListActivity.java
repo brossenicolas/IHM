@@ -35,7 +35,7 @@ public class EditShoppingListActivity extends AppCompatActivity {
 
         /* Création du menu */
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Editer la liste de course");
+        toolbar.setTitle("Editer la liste de courses");
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -107,10 +107,9 @@ public class EditShoppingListActivity extends AppCompatActivity {
 
     private class MyListAdaper extends ArrayAdapter<String> {
         private int layout;
-        private List<String> mObjects;
+
         private MyListAdaper(Context context, int resource, List<String> objects) {
             super(context, resource, objects);
-            mObjects = objects;
             layout = resource;
         }
 
@@ -126,7 +125,6 @@ public class EditShoppingListActivity extends AppCompatActivity {
                 convertView.setTag(viewHolder);
             }
             mainViewholder = (ViewHolder) convertView.getTag();
-            final ViewHolder finalMainViewholder = mainViewholder;
             mainViewholder.image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

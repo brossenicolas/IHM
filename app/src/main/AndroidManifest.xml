@@ -12,19 +12,20 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:windowSoftInputMode="stateHidden">
-        </activity>
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".RegisterActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".PlanningActivity" />
         <activity android:name=".ShoppingListActivity" />
         <activity android:name=".EditShoppingListActivity" />
+        <activity android:name=".AddEventActivity"></activity>
     </application>
 
 </manifest>
