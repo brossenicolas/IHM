@@ -22,12 +22,16 @@ public class PlanningActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Planning");
         setSupportActionBar(toolbar);
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-        menu.findItem(R.id.action_add).setVisible(false);
+        menu.findItem(R.id.action_edit).setVisible(false);
         return true;
     }
 
@@ -37,10 +41,13 @@ public class PlanningActivity extends AppCompatActivity {
             case R.id.action_logout:
                 session.logoutUser();
                 return true;
-            case R.id.action_shopping_list:
-                startActivity(new Intent(PlanningActivity.this, ShoppingListActivity.class));
-                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        super.onBackPressed();
+        return true;
     }
 }

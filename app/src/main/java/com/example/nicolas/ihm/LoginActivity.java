@@ -24,7 +24,7 @@ public class LoginActivity extends AppCompatActivity {
 
         /* Redirection si l'utilisateur est déjà connecté */
         if (session.isLoggedIn()) {
-            Intent intent = new Intent(LoginActivity.this, PlanningActivity.class);
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
                 } else {
                     /* Création de la variable session */
                     session.createLoginSession(name);
-                    Intent intent = new Intent(LoginActivity.this, PlanningActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
                     finish();
                 }

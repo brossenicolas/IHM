@@ -6,9 +6,9 @@
         android:title="Déconnexion" />
 
     <item
-        android:id="@+id/action_shopping_list"
-        android:title="shopping_list"
-        android:icon="@drawable/ic_shopping_cart_black_24dp"
+        android:id="@+id/action_edit"
+        android:title="add"
+        android:icon="@drawable/ic_mode_edit_black_24dp"
         app:showAsAction="always"/>
 
     <item

@@ -1,23 +1,25 @@
 package com.example.nicolas.ihm;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 
-public class ShoppingListActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
     private SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shopping_list);
+        setContentView(R.layout.activity_main);
 
-        /* Récupération de la variable session */
+         /* Récupération de la variable session */
         session = new SessionManager(getApplicationContext());
         session.checkLogin();
 
@@ -25,19 +27,32 @@ public class ShoppingListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Liste de courses");
         setSupportActionBar(toolbar);
-        if(getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowHomeEnabled(true);
-        }
 
-        ListView shoppingListView = findViewById(R.id.shoppingListView);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(ShoppingListActivity.this, android.R.layout.simple_list_item_1, ShoppingList.getShoppingList());
-        shoppingListView.setAdapter(adapter);
+        ImageView planning = findViewById(R.id.imagePlanning);
+        planning.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, PlanningActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        ImageView shoppingList = findViewById(R.id.imageShoppingList);
+        shoppingList.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ShoppingListActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        menu.findItem(R.id.action_edit).setVisible(false);
         menu.findItem(R.id.action_add).setVisible(false);
         return true;
     }
@@ -48,20 +63,7 @@ public class ShoppingListActivity extends AppCompatActivity {
             case R.id.action_logout:
                 session.logoutUser();
                 return true;
-            case R.id.action_edit:
-                Intent intent = new Intent(ShoppingListActivity.this, EditShoppingListActivity.class);
-                startActivity(intent);
-                finish();
-                return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        Intent intent = new Intent(ShoppingListActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
-        return true;
     }
 }
