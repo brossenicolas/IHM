@@ -14,7 +14,6 @@
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -22,7 +21,8 @@
             android:name=".RegisterActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".PlanningActivity" />
-        <activity android:name=".ShoppingListActivity"></activity>
+        <activity android:name=".ShoppingListActivity" />
+        <activity android:name=".AddShoppingItemActivity" />
     </application>
 
 </manifest>

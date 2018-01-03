@@ -32,7 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 /* Vérification que les champs soient remplis */
                 if (name.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Inputs must be filled", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Les champs doivent être remplis", Toast.LENGTH_LONG).show();
                 }
                 else {
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);

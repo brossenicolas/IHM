@@ -10,4 +10,10 @@
         android:title="shopping_list"
         android:icon="@drawable/ic_shopping_cart_black_24dp"
         app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_add"
+        android:title="add"
+        android:icon="@drawable/ic_add_black_24dp"
+        app:showAsAction="always"/>
 </menu>

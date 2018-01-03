@@ -7,8 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.util.HashMap;
-
 public class PlanningActivity extends AppCompatActivity {
     private SessionManager session;
 
@@ -19,7 +17,6 @@ public class PlanningActivity extends AppCompatActivity {
 
         session = new SessionManager(getApplicationContext());
         session.checkLogin();
-        final HashMap<String, String> user = session.getUserDetails();
 
         /* Création du menu */
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -30,6 +27,7 @@ public class PlanningActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        menu.findItem(R.id.action_add).setVisible(false);
         return true;
     }
 

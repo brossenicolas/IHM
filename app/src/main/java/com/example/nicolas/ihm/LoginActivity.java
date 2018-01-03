@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
                 String password = inputPassword.getText().toString().trim();
 
                 if (name.isEmpty() || password.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Inputs must be filled", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Les champs doivent être remplis", Toast.LENGTH_LONG).show();
                 } else {
                     /* Création de la variable session */
                     session.createLoginSession(name);

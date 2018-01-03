@@ -2,6 +2,7 @@ package com.example.nicolas.ihm;
 
 import java.util.HashMap;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,16 +10,13 @@ import android.content.SharedPreferences.Editor;
 
 public class SessionManager {
     // Shared Preferences
-    SharedPreferences pref;
+    private SharedPreferences pref;
 
     // Editor for Shared preferences
-    Editor editor;
+    private Editor editor;
 
     // Context
-    Context _context;
-
-    // Shared pref mode
-    int PRIVATE_MODE = 0;
+    private Context _context;
 
     // Sharedpref file name
     private static final String PREF_NAME = "AndroidHivePref";
@@ -27,11 +25,13 @@ public class SessionManager {
     private static final String IS_LOGIN = "IsLoggedIn";
 
     // User name (make variable public to access from outside)
-    public static final String KEY_NAME = "name";
+    private static final String KEY_NAME = "name";
 
     // Constructor
-    public SessionManager(Context context){
+    @SuppressLint("CommitPrefEdits")
+    SessionManager(Context context){
         this._context = context;
+        int PRIVATE_MODE = 0;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
     }
@@ -39,7 +39,7 @@ public class SessionManager {
     /**
      * Create login session
      * */
-    public void createLoginSession(String name){
+    void createLoginSession(String name){
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 
@@ -55,7 +55,7 @@ public class SessionManager {
      * If false it will redirect user to login page
      * Else won't do anything
      * */
-    public void checkLogin(){
+    void checkLogin(){
         // Check login status
         if(!this.isLoggedIn()){
             // user is not logged in redirect him to Login Activity
@@ -76,7 +76,7 @@ public class SessionManager {
      * Get stored session data
      * */
     public HashMap<String, String> getUserDetails(){
-        HashMap<String, String> user = new HashMap<String, String>();
+        HashMap<String, String> user = new HashMap<>();
 
         // user name
         user.put(KEY_NAME, pref.getString(KEY_NAME, null));
@@ -88,7 +88,7 @@ public class SessionManager {
     /**
      * Clear session details
      * */
-    public void logoutUser(){
+    void logoutUser(){
         // Clearing all data from Shared Preferences
         editor.clear();
         editor.commit();
@@ -109,7 +109,7 @@ public class SessionManager {
      * Quick check for login
      * **/
     // Get Login State
-    public boolean isLoggedIn(){
+    boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGIN, false);
     }
 }
