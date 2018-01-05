@@ -2,9 +2,11 @@ package com.example.nicolas.ihm;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,10 +23,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
-public class AddEventActivity extends AppCompatActivity implements View.OnClickListener {
+public class EventActivity extends AppCompatActivity implements View.OnClickListener {
     private SessionManager session;
-    private TextView tvDisplayDate;
-    private TextView tvDisplayTime;
+    private Event event;
+    TextView tvDisplayDate;
+    TextView tvDisplayTime;
 
     private int year;
     private int month;
@@ -37,15 +40,22 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_event);
+        setContentView(R.layout.activity_event);
 
          /* Récupération de la variable session */
         session = new SessionManager(getApplicationContext());
         session.checkLogin();
 
+        for(Event e : EventList.getEventList()){
+            if(e.getId().equals(getIntent().getStringExtra("idEvent"))) {
+                event = e;
+                break;
+            }
+        }
+
         /* Création du menu */
         Toolbar toolbar = findViewById(R.id.toolbar);
-        toolbar.setTitle("Ajouter un événement");
+        toolbar.setTitle("Modifier événement");
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -53,36 +63,44 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         }
 
         final Spinner spinner = findViewById(R.id.spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(AddEventActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>(Arrays.asList("Rendez-vous", "Menu", "Tâche ménagère")));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(EventActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>(Arrays.asList("Rendez-vous", "Menu", "Tâche ménagère")));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+        for(int i = 0; i < adapter.getCount(); i++) {
+            if(event.getType().equals(adapter.getItem(i).toString())){
+                spinner.setSelection(i);
+                break;
+            }
+        }
 
-        tvDisplayDate = findViewById(R.id.tvDate);
         final Calendar c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
         day = c.get(Calendar.DAY_OF_MONTH);
-        tvDisplayDate.setText(new StringBuilder().append(formater.format(day)).append("/").append(formater.format(month + 1)).append("/").append(year));
-
-        tvDisplayTime = findViewById(R.id.tvTime);
         hour = c.get(Calendar.HOUR);
         minute = c.get(Calendar.MINUTE);
-        tvDisplayTime.setText(new StringBuilder().append(formater.format(hour)).append(":").append(formater.format(minute)));
+
+        tvDisplayDate = findViewById(R.id.tvDate);
+        tvDisplayDate.setText(event.getDate());
+
+        tvDisplayTime = findViewById(R.id.tvTime);
+        tvDisplayTime.setText(event.getTime());
+
+        final TextView tvDescription = findViewById(R.id.tvDescription);
+        tvDescription.setText(event.getDescription());
 
         tvDisplayDate.setOnClickListener(this);
         tvDisplayTime.setOnClickListener(this);
 
-        final TextView tvDescription = findViewById(R.id.tvDescription);
-        Button btnAdd = findViewById(R.id.btnAdd);
-        btnAdd.setOnClickListener(new View.OnClickListener(){
+        Button btnModify = findViewById(R.id.btnModify);
+        btnModify.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                if(EventList.getEventList().isEmpty()) {
-                    Event event = new Event("0", spinner.getSelectedItem().toString().trim(), tvDisplayDate.getText().toString().trim(), tvDisplayTime.getText().toString().trim(), tvDescription.getText().toString().trim());
-                }
-                Event event = new Event(Integer.toString(Integer.parseInt(EventList.getEventList().get(EventList.getEventList().size()-1).getId()) + 1),spinner.getSelectedItem().toString().trim(), tvDisplayDate.getText().toString().trim(), tvDisplayTime.getText().toString().trim(), tvDescription.getText().toString().trim());
-                EventList.getEventList().add(event);
-                Intent intent = new Intent(AddEventActivity.this, PlanningActivity.class);
+                event.setType(spinner.getSelectedItem().toString().trim());
+                event.setDate(tvDisplayDate.getText().toString().trim());
+                event.setTime(tvDisplayTime.getText().toString().trim());
+                event.setDescription(tvDescription.getText().toString().trim());
+                Intent intent = new Intent(EventActivity.this, PlanningActivity.class);
                 startActivity(intent);
                 finish();
             }
@@ -92,12 +110,35 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
+        menu.findItem(R.id.action_delete).setVisible(true);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
+            case R.id.action_delete:
+                new AlertDialog.Builder(EventActivity.this)
+                        .setTitle("Supprimer")
+                        .setMessage("Supprimer l'événement ?")
+                        .setPositiveButton("Non",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.cancel();
+                                    }
+                                })
+                        .setNegativeButton("Oui",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        EventList.getEventList().remove(event);
+                                        Intent intent = new Intent(EventActivity.this, PlanningActivity.class);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                return true;
             case R.id.action_logout:
                 session.logoutUser();
                 return true;
@@ -107,7 +148,7 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public boolean onSupportNavigateUp() {
-        Intent intent = new Intent(AddEventActivity.this, PlanningActivity.class);
+        Intent intent = new Intent(EventActivity.this, PlanningActivity.class);
         startActivity(intent);
         finish();
         return true;

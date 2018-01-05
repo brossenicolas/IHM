@@ -49,7 +49,7 @@ public class EditShoppingListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-        menu.findItem(R.id.action_edit).setVisible(false);
+        menu.findItem(R.id.action_add).setVisible(true);
         return true;
     }
 
@@ -130,7 +130,7 @@ public class EditShoppingListActivity extends AppCompatActivity {
                 public void onClick(View v) {
                    new AlertDialog.Builder(EditShoppingListActivity.this)
                         .setTitle("Supprimer")
-                        .setMessage("Supprimer" + ShoppingList.getShoppingList().get(position) + " ?")
+                        .setMessage("Supprimer " + ShoppingList.getShoppingList().get(position) + " ?")
                         .setPositiveButton("Non",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {

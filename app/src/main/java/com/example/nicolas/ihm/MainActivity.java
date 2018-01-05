@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, PlanningActivity.class);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -50,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-        menu.findItem(R.id.action_edit).setVisible(false);
-        menu.findItem(R.id.action_add).setVisible(false);
         return true;
     }
 

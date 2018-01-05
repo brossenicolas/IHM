@@ -18,14 +18,15 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:windowSoftInputMode="stateHidden"></activity>
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".RegisterActivity"
             android:windowSoftInputMode="stateHidden" />
         <activity android:name=".PlanningActivity" />
         <activity android:name=".ShoppingListActivity" />
         <activity android:name=".EditShoppingListActivity" />
-        <activity android:name=".AddEventActivity"></activity>
+        <activity android:name=".AddEventActivity" />
+        <activity android:name=".EventActivity"></activity>
     </application>
 
 </manifest>

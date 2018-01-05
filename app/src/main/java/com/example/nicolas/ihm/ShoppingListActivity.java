@@ -38,20 +38,20 @@ public class ShoppingListActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
-        menu.findItem(R.id.action_add).setVisible(false);
+        menu.findItem(R.id.action_edit).setVisible(true);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_logout:
-                session.logoutUser();
-                return true;
             case R.id.action_edit:
                 Intent intent = new Intent(ShoppingListActivity.this, EditShoppingListActivity.class);
                 startActivity(intent);
                 finish();
+                return true;
+            case R.id.action_logout:
+                session.logoutUser();
                 return true;
         }
         return super.onOptionsItemSelected(item);
