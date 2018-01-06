@@ -1,15 +1,26 @@
 package com.example.nicolas.ihm;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class ShoppingList {
-    private static ArrayList<String> shoppingList = new ArrayList<>(Arrays.asList("Jambon", "Beurre", "Pain"));
+class ShoppingList {
+    private String id;
+    private ArrayList<String> shoppingList;
 
-    public ShoppingList() {}
+    ShoppingList(String id) {
+        this.id = id;
+        this.shoppingList = new ArrayList<>();
+    }
 
-    static List getShoppingList() {
+    ShoppingList(String id, ArrayList<String> shoppingList) {
+        this.id = id;
+        this.shoppingList = shoppingList;
+    }
+
+    String getId() {
+        return id;
+    }
+
+    ArrayList<String> getShoppingList() {
         return shoppingList;
     }
 }

@@ -42,16 +42,9 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
-         /* Récupération de la variable session */
+        /* Récupération de la variable session */
         session = new SessionManager(getApplicationContext());
         session.checkLogin();
-
-        for(Event e : EventList.getEventList()){
-            if(e.getId().equals(getIntent().getStringExtra("idEvent"))) {
-                event = e;
-                break;
-            }
-        }
 
         /* Création du menu */
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -62,17 +55,24 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+        /* Récupération de l'événement */
+        event = Bdd.getEvent(getIntent().getStringExtra("idEvent"));
+
+        /* Création du spinner */
         final Spinner spinner = findViewById(R.id.spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(EventActivity.this, android.R.layout.simple_spinner_item, new ArrayList<>(Arrays.asList("Rendez-vous", "Menu", "Tâche ménagère")));
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
+
+        /* Sélection du type correspondant à l'événement */
         for(int i = 0; i < adapter.getCount(); i++) {
-            if(event.getType().equals(adapter.getItem(i).toString())){
+            if(event.getType().equals(adapter.getItem(i))){
                 spinner.setSelection(i);
                 break;
             }
         }
 
+        /* Récupération de la date actuelle */
         final Calendar c = Calendar.getInstance();
         year = c.get(Calendar.YEAR);
         month = c.get(Calendar.MONTH);
@@ -100,6 +100,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                 event.setDate(tvDisplayDate.getText().toString().trim());
                 event.setTime(tvDisplayTime.getText().toString().trim());
                 event.setDescription(tvDescription.getText().toString().trim());
+
                 Intent intent = new Intent(EventActivity.this, PlanningActivity.class);
                 startActivity(intent);
                 finish();
@@ -130,7 +131,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
                         .setNegativeButton("Oui",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int which) {
-                                        EventList.getEventList().remove(event);
+                                        Bdd.getEventList().remove(event);
                                         Intent intent = new Intent(EventActivity.this, PlanningActivity.class);
                                         startActivity(intent);
                                         finish();
@@ -154,6 +155,7 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         return true;
     }
 
+    /* Ouverture des dialogs pour la sélection de la date et de l'heure */
     @Override
     public void onClick(View v) {
         if (v == tvDisplayDate) {

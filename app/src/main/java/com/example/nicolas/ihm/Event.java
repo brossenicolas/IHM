@@ -1,13 +1,15 @@
 package com.example.nicolas.ihm;
 
 public class Event {
+    private String id_user;
     private String id;
     private String type;
     private String date;
     private String time;
     private String description;
 
-    public Event(String id, String type, String date, String time, String description) {
+    Event(String id_user, String id, String type, String date, String time, String description) {
+        this.id_user = id_user;
         this.id = id;
         this.type = type;
         this.date = date;
@@ -15,13 +17,15 @@ public class Event {
         this.description = description;
     }
 
+    String getIdUser() { return id_user; }
+
     public String getId() { return id; }
 
-    public String getType() {
+    String getType() {
         return type;
     }
 
-    public String getDate() {
+    String getDate() {
         return date;
     }
 
@@ -29,15 +33,15 @@ public class Event {
         return time;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 
-    public void setType(String type) {
+    void setType(String type) {
         this.type = type;
     }
 
-    public void setDate(String date) {
+    void setDate(String date) {
         this.date = date;
     }
 
@@ -45,7 +49,7 @@ public class Event {
         this.time = time;
     }
 
-    public void setDescription(String description) {
+    void setDescription(String description) {
         this.description = description;
     }
 }

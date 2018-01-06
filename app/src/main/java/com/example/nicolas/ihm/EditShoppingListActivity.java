@@ -42,8 +42,9 @@ public class EditShoppingListActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+        /* Création de la liste */
         ListView shoppingListView = findViewById(R.id.shoppingListView);
-        shoppingListView.setAdapter(new MyListAdaper(this, R.layout.edit_shopping_list_simple_row, ShoppingList.getShoppingList()));
+        shoppingListView.setAdapter(new MyListAdaper(this, R.layout.edit_shopping_list_simple_row, Bdd.getShoppingList(session.getUserDetails().get(SessionManager.KEY_ID))));
     }
 
     @Override
@@ -65,7 +66,9 @@ public class EditShoppingListActivity extends AppCompatActivity {
                 alertDialogBuilder.setView(promptsView);
 
                 final EditText inputName = promptsView.findViewById(R.id.inputTextDialog);
+                inputName.setHint("Nom");
 
+                /* Création de l'alert pour l'ajout d'un item à la liste de courses */
                 alertDialogBuilder
                         .setTitle("Ajouter")
                         .setPositiveButton("Annuler",
@@ -81,7 +84,7 @@ public class EditShoppingListActivity extends AppCompatActivity {
                                         if (name.isEmpty()) {
                                             Toast.makeText(getApplicationContext(), "Le nom doit être rempli", Toast.LENGTH_LONG).show();
                                         } else {
-                                            ShoppingList.getShoppingList().add(name);
+                                            Bdd.getShoppingList(session.getUserDetails().get(SessionManager.KEY_ID)).add(name);
                                             finish();
                                             startActivity(getIntent());
                                         }
@@ -130,7 +133,7 @@ public class EditShoppingListActivity extends AppCompatActivity {
                 public void onClick(View v) {
                    new AlertDialog.Builder(EditShoppingListActivity.this)
                         .setTitle("Supprimer")
-                        .setMessage("Supprimer " + ShoppingList.getShoppingList().get(position) + " ?")
+                        .setMessage("Supprimer " + Bdd.getShoppingList(session.getUserDetails().get(SessionManager.KEY_ID)).get(position) + " ?")
                         .setPositiveButton("Non",
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
@@ -140,7 +143,7 @@ public class EditShoppingListActivity extends AppCompatActivity {
                        .setNegativeButton("Oui",
                            new DialogInterface.OnClickListener() {
                                public void onClick(DialogInterface dialog, int which) {
-                                   ShoppingList.getShoppingList().remove(position);
+                                   Bdd.getShoppingList(session.getUserDetails().get(SessionManager.KEY_ID)).remove(position);
                                    finish();
                                    startActivity(getIntent());
                                }

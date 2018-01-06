@@ -10,9 +10,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
+    private SessionManager session;
     private EditText inputName;
     private EditText inputPassword;
-    private SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +37,26 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                /* Récupération des valeurs des champs */
                 String name = inputName.getText().toString().trim();
                 String password = inputPassword.getText().toString().trim();
 
                 if (name.isEmpty() || password.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Les champs doivent être remplis", Toast.LENGTH_LONG).show();
                 } else {
-                    /* Création de la variable session */
-                    session.createLoginSession(name);
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    for(Account account : Bdd.getAccountList()) {
+                        /* Vérification des identifiants */
+                        if(name.equals(account.getName()) && password.equals(account.getPassword())){
+                            /* Création de la variable session */
+                            session.createLoginSession(account.getId(), name);
+
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                            return;
+                        }
+                    }
+                    Toast.makeText(getApplicationContext(), "Identifiants incorrects", Toast.LENGTH_LONG).show();
                 }
             }
         });

@@ -1,15 +1,19 @@
 package com.example.nicolas.ihm;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.method.PasswordTransformationMethod;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -30,6 +34,7 @@ public class PlanningActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_planning);
 
+         /* Récupération de la variable session */
         session = new SessionManager(getApplicationContext());
         session.checkLogin();
 
@@ -45,18 +50,23 @@ public class PlanningActivity extends AppCompatActivity {
         CalendarView calendarView = findViewById(R.id.calendarView);
         final ListView eventListView = findViewById(R.id.eventListView);
 
+        /* Récupération de la date actuelle */
         final Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int dayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+
         List<Event> eventListAtDate = getEventsAtDate(year, month, dayOfMonth);
+
         SimpleAdapter sa = createAdaptater(eventListAtDate);
         eventListView.setAdapter(sa);
 
+        /* Mise à jour de la date en fonction de la date séléctionnée */
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 List<Event> eventListAtDate = getEventsAtDate(year, month, dayOfMonth);
+
                 SimpleAdapter sa = createAdaptater(eventListAtDate);
                 eventListView.setAdapter(sa);
             }
@@ -64,11 +74,43 @@ public class PlanningActivity extends AppCompatActivity {
 
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView txtViewId = (TextView) view.findViewById(R.id.tvId);
-                Intent intent = new Intent(PlanningActivity.this, EventActivity.class);
-                intent.putExtra("idEvent", txtViewId.getText());
-                startActivity(intent);
-                finish();
+                LayoutInflater li = LayoutInflater.from(PlanningActivity.this);
+                View promptsView = li.inflate(R.layout.input_dialog,null);
+
+                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(PlanningActivity.this);
+
+                alertDialogBuilder.setView(promptsView);
+
+                final EditText inputName = promptsView.findViewById(R.id.inputTextDialog);
+                final TextView txtViewId = view.findViewById(R.id.tvId);
+                inputName.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                inputName.setHint("Mot de passe");
+
+                /* Création de l'alert pour la demande du mot de passe administrateur */
+                alertDialogBuilder
+                        .setTitle("Mot de passe administrateur")
+                        .setPositiveButton("Annuler",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        dialog.cancel();
+                                    }
+                                })
+                        .setNegativeButton("Valider",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        String name = inputName.getText().toString().trim();
+                                        if (name.equals(Bdd.getAccount(session.getUserDetails().get(SessionManager.KEY_ID)).getAdminPassword())) {
+                                            Intent intent = new Intent(PlanningActivity.this, EventActivity.class);
+                                            intent.putExtra("idEvent", txtViewId.getText());
+                                            startActivity(intent);
+                                            finish();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Mot de passe incorrect", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
             }
         });
 
@@ -85,9 +127,41 @@ public class PlanningActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_add:
-                Intent intent = new Intent(PlanningActivity.this, AddEventActivity.class);
-                startActivity(intent);
-                finish();
+                LayoutInflater li = LayoutInflater.from(this);
+                View promptsView = li.inflate(R.layout.input_dialog,null);
+
+                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+                alertDialogBuilder.setView(promptsView);
+
+                final EditText inputName = promptsView.findViewById(R.id.inputTextDialog);
+                inputName.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                inputName.setHint("Mot de passe");
+
+                /* Création de l'alert pour la demande du mot de passe administrateur */
+                alertDialogBuilder
+                        .setTitle("Mot de passe administrateur")
+                        .setPositiveButton("Annuler",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        dialog.cancel();
+                                    }
+                                })
+                        .setNegativeButton("Valider",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog,int id) {
+                                        String name = inputName.getText().toString().trim();
+                                        if (name.equals(Bdd.getAccount(session.getUserDetails().get(SessionManager.KEY_ID)).getAdminPassword())) {
+                                            Intent intent = new Intent(PlanningActivity.this, AddEventActivity.class);
+                                            startActivity(intent);
+                                            finish();
+                                        } else {
+                                            Toast.makeText(getApplicationContext(), "Mot de passe incorrect", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
                 return true;
             case R.id.action_logout:
                 session.logoutUser();
@@ -104,9 +178,10 @@ public class PlanningActivity extends AppCompatActivity {
         return true;
     }
 
+    /* Retourne une liste de tous les événements à une date donnée */
     public List<Event> getEventsAtDate(int year, int month, int dayOfMonth){
         List<Event> eventListAtDate = new ArrayList<>();
-        for(Event e : EventList.getEventList()){
+        for(Event e : Bdd.getEventList(session.getUserDetails().get(SessionManager.KEY_ID))){
             if(e.getDate().equals(formater.format(dayOfMonth) + "/" + formater.format(month + 1) + "/" + year)) {
                 eventListAtDate.add(e);
             }
@@ -118,7 +193,7 @@ public class PlanningActivity extends AppCompatActivity {
         ArrayList<HashMap<String,String>> list = new ArrayList<>();
         HashMap<String,String> item;
         for(Event e : eventListAtDate){
-            item = new HashMap<String,String>();
+            item = new HashMap<>();
             item.put("time", e.getTime());
             item.put("type", e.getType());
             item.put("description", e.getDescription());

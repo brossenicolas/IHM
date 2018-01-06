@@ -6,26 +6,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import java.util.HashMap;
+
 class SessionManager {
-    // Shared Preferences
     private SharedPreferences pref;
-
-    // Editor for Shared preferences
     private Editor editor;
-
-    // Context
     private Context _context;
-
-    // Sharedpref file name
     private static final String PREF_NAME = "AndroidHivePref";
-
-    // All Shared Preferences Keys
     private static final String IS_LOGIN = "IsLoggedIn";
-
-    // User name (make variable public to access from outside)
+    static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
 
-    // Constructor
     @SuppressLint("CommitPrefEdits")
     SessionManager(Context context){
         this._context = context;
@@ -35,65 +26,66 @@ class SessionManager {
     }
 
     /**
-     * Create login session
+     * Création de la session
      * */
-    void createLoginSession(String name){
-        // Storing login value as TRUE
+    void createLoginSession(String id, String name){
         editor.putBoolean(IS_LOGIN, true);
-
-        // Storing name in pref
+        editor.putString(KEY_ID, id);
         editor.putString(KEY_NAME, name);
-
-        // commit changes
         editor.commit();
     }
 
     /**
-     * Check login method wil check user login status
-     * If false it will redirect user to login page
-     * Else won't do anything
+     * Récupération des détails de l'utilisateur
+     * */
+    HashMap<String, String> getUserDetails(){
+        HashMap<String, String> user = new HashMap<>();
+        user.put(KEY_ID, pref.getString(KEY_ID, null));
+        user.put(KEY_NAME, pref.getString(KEY_NAME, null));
+        return user;
+    }
+
+    /**
+     * Vérifie si l'utilisateur est connecté
+     * Si non, redirection vers la page login
      * */
     void checkLogin(){
-        // Check login status
         if(!this.isLoggedIn()){
-            // user is not logged in redirect him to Login Activity
             Intent i = new Intent(_context, LoginActivity.class);
-            // Closing all the Activities
+            // Fermeture de toutes les activités
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-            // Add new Flag to start new Activity
+            // Ajout un nouveau Flag pour commencer une nouvelle activité
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            // Staring Login Activity
+            // Ouverture de l'activité login
             _context.startActivity(i);
         }
 
     }
 
     /**
-     * Clear session details
+     * Vide les détails de l'utilisateur
      * */
     void logoutUser(){
-        // Clearing all data from Shared Preferences
+        // Vide les préférences de Shared Preferences
         editor.clear();
         editor.commit();
 
-        // After logout redirect user to Loing Activity
         Intent i = new Intent(_context, LoginActivity.class);
-        // Closing all the Activities
+        // Fermeture de toutes les activités
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-        // Add new Flag to start new Activity
+        // Ajout un nouveau Flag pour commencer une nouvelle activité
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        // Staring Login Activity
+        // Ouverture de l'activité login
         _context.startActivity(i);
     }
 
     /**
-     * Quick check for login
+     * Récupération de l'état de IS_LOGIN
      * **/
-    // Get Login State
     boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGIN, false);
     }
