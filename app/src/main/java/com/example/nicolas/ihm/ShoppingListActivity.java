@@ -55,41 +55,48 @@ public class ShoppingListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_edit:
-                LayoutInflater li = LayoutInflater.from(this);
-                View promptsView = li.inflate(R.layout.input_dialog, null);
+                if(!session.isAdmin()) {
+                    LayoutInflater li = LayoutInflater.from(this);
+                    View promptsView = li.inflate(R.layout.input_dialog, null);
 
-                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                    final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
-                alertDialogBuilder.setView(promptsView);
+                    alertDialogBuilder.setView(promptsView);
 
-                final EditText inputName = promptsView.findViewById(R.id.inputTextDialog);
-                inputName.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                inputName.setHint("Mot de passe");
+                    final EditText inputName = promptsView.findViewById(R.id.inputTextDialog);
+                    inputName.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    inputName.setHint("Mot de passe");
 
-                /* Création de l'alert pour la demande du mot de passe administrateur */
-                alertDialogBuilder
-                        .setTitle("Mot de passe administrateur")
-                        .setPositiveButton("Annuler",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                })
-                        .setNegativeButton("Valider",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        String name = inputName.getText().toString().trim();
-                                        if (name.equals(Bdd.getAccount(session.getUserDetails().get(SessionManager.KEY_ID)).getAdminPassword())) {
-                                            Intent intent = new Intent(ShoppingListActivity.this, EditShoppingListActivity.class);
-                                            startActivity(intent);
-                                            finish();
-                                        } else {
-                                            Toast.makeText(getApplicationContext(), "Mot de passe incorrect", Toast.LENGTH_LONG).show();
+                    /* Création de l'alert pour la demande du mot de passe administrateur */
+                    alertDialogBuilder
+                            .setTitle("Mot de passe administrateur")
+                            .setPositiveButton("Annuler",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            dialog.cancel();
                                         }
-                                    }
-                                });
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
+                                    })
+                            .setNegativeButton("Valider",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            String name = inputName.getText().toString().trim();
+                                            if (name.equals(Bdd.getAccount(session.getUserDetails().get(SessionManager.KEY_ID)).getAdminPassword())) {
+                                                session.setAdmin();
+                                                Intent intent = new Intent(ShoppingListActivity.this, EditShoppingListActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), "Mot de passe incorrect", Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+                } else {
+                    Intent intent = new Intent(ShoppingListActivity.this, EditShoppingListActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
                 return true;
             case R.id.action_logout:
                 session.logoutUser();

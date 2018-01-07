@@ -14,6 +14,7 @@ class SessionManager {
     private Context _context;
     private static final String PREF_NAME = "AndroidHivePref";
     private static final String IS_LOGIN = "IsLoggedIn";
+    private static final String IS_ADMIN = "IsAdmin";
     static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
 
@@ -89,4 +90,14 @@ class SessionManager {
     boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGIN, false);
     }
+
+    /**
+     * Récupération de l'état de IS_LOGIN
+     * **/
+    void setAdmin() { editor.putBoolean(IS_ADMIN, true); editor.commit(); }
+
+    /**
+     * Récupération de l'état de IS_ADMIN
+     * **/
+    boolean isAdmin() { return pref.getBoolean(IS_ADMIN, false); }
 }
