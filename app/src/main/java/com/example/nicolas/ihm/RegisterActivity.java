@@ -9,11 +9,28 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Cette class implémente le controlleur de la vue d'inscription d'un compte utilisateur
+ * @author François ADINOLFI Loïc DUFEIL Jessica MARTINEZ Nicolas BROSSE
+ */
 public class RegisterActivity extends AppCompatActivity {
+    /**
+     * Champs nom de la vue
+     */
     private EditText inputName;
+    /**
+     * Champs mot de passe de la vue
+     */
     private EditText inputPassword;
+    /**
+     * Champs mot de passe administrateur de la vue
+     */
     private EditText inputAdminPassword;
 
+    /**
+     * Méthode appelé à la création de l'activité
+     * @param savedInstanceState état de l'instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

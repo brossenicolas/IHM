@@ -21,9 +21,20 @@ import android.widget.Toast;
 
 import java.util.List;
 
+/**
+ * Cette class implémente le controlleur de la vue d'édition de la liste de courses
+ * @author François ADINOLFI Loïc DUFEIL Jessica MARTINEZ Nicolas BROSSE
+ */
 public class EditShoppingListActivity extends AppCompatActivity {
+    /**
+     * Variable session de l'application
+     */
     private SessionManager session;
 
+    /**
+     * Méthode appelé à la création de l'activité
+     * @param savedInstanceState état de l'instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +58,11 @@ public class EditShoppingListActivity extends AppCompatActivity {
         shoppingListView.setAdapter(new MyListAdaper(this, R.layout.edit_shopping_list_simple_row, Bdd.getShoppingList(session.getUserDetails().get(SessionManager.KEY_ID))));
     }
 
+    /**
+     * Méthode appelé à la création de l'activité pour construire le menu
+     * @param menu menu de l'activité
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -54,6 +70,11 @@ public class EditShoppingListActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Méthode qui implémente les boutons du menu
+     * @param item item sélectionné dans le menu
+     * @return true
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -100,6 +121,10 @@ public class EditShoppingListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Méthode qui implémente le boutton retour du menu
+     * @return true
+     */
     @Override
     public boolean onSupportNavigateUp() {
         Intent intent = new Intent(EditShoppingListActivity.this, ShoppingListActivity.class);

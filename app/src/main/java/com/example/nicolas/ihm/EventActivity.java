@@ -23,20 +23,58 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
+/**
+ * Cette class implémente le controlleur de la vue d'un événement
+ * @author François ADINOLFI Loïc DUFEIL Jessica MARTINEZ Nicolas BROSSE
+ */
 public class EventActivity extends AppCompatActivity implements View.OnClickListener {
+    /**
+     * Variable session de l'application
+     */
     private SessionManager session;
+    /**
+     * Evénement correspondant à la vue
+     */
     private Event event;
-    TextView tvDisplayDate;
-    TextView tvDisplayTime;
+    /**
+     * Champs date de la vue
+     */
+    private TextView tvDisplayDate;
+    /**
+     * Champs heure de la vue
+     */
+    private TextView tvDisplayTime;
 
+    /**
+     * Année selectionné
+     */
     private int year;
+    /**
+     * Mois selectionné
+     */
     private int month;
+    /**
+     * Jour selectionné
+     */
     private int day;
+    /**
+     * Heure selectionné
+     */
     private int hour;
+    /**
+     * Minute selectionné
+     */
     private int minute;
 
+    /**
+     * Formatage des nombres des heures et dates
+     */
     DecimalFormat formater = new DecimalFormat("00");
 
+    /**
+     * Méthode appelé à la création de l'activité
+     * @param savedInstanceState état de l'instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +146,11 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
+    /**
+     * Méthode appelé à la création de l'activité pour construire le menu
+     * @param menu menu de l'activité
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -115,6 +158,11 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         return true;
     }
 
+    /**
+     * Méthode qui implémente les boutons du menu
+     * @param item item sélectionné dans le menu
+     * @return true
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -147,6 +195,10 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Méthode qui implémente le boutton retour du menu
+     * @return true
+     */
     @Override
     public boolean onSupportNavigateUp() {
         Intent intent = new Intent(EventActivity.this, PlanningActivity.class);
@@ -155,7 +207,10 @@ public class EventActivity extends AppCompatActivity implements View.OnClickList
         return true;
     }
 
-    /* Ouverture des dialogs pour la sélection de la date et de l'heure */
+    /**
+     * Ouverture des dialogs pour la sélection de la date et de l'heure lorsque l'un des champs est cliqué
+     * @param v vue cliquée
+     */
     @Override
     public void onClick(View v) {
         if (v == tvDisplayDate) {

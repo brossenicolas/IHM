@@ -8,6 +8,10 @@ import android.content.SharedPreferences.Editor;
 
 import java.util.HashMap;
 
+/**
+ * Cette class implémente la séssion utilisateur
+ * @author François ADINOLFI Loïc DUFEIL Jessica MARTINEZ Nicolas BROSSE
+ */
 class SessionManager {
     private SharedPreferences pref;
     private Editor editor;
@@ -15,7 +19,14 @@ class SessionManager {
     private static final String PREF_NAME = "AndroidHivePref";
     private static final String IS_LOGIN = "IsLoggedIn";
     private static final String IS_ADMIN = "IsAdmin";
+
+    /**
+     * Identifiant du compte
+     */
     static final String KEY_ID = "id";
+    /**
+     * Nom du compte
+     */
     private static final String KEY_NAME = "name";
 
     @SuppressLint("CommitPrefEdits")
@@ -27,8 +38,10 @@ class SessionManager {
     }
 
     /**
-     * Création de la session
-     * */
+     * Création d'une séssion
+     * @param id identifiant de l'utilisateur
+     * @param name nom de l'utilisateur
+     */
     void createLoginSession(String id, String name){
         editor.putBoolean(IS_LOGIN, true);
         editor.putString(KEY_ID, id);
@@ -37,8 +50,9 @@ class SessionManager {
     }
 
     /**
-     * Récupération des détails de l'utilisateur
-     * */
+     * Récupératin des détails de l'utilisateur connecté
+     * @return détails de l'utilisateur connecté
+     */
     HashMap<String, String> getUserDetails(){
         HashMap<String, String> user = new HashMap<>();
         user.put(KEY_ID, pref.getString(KEY_ID, null));
@@ -49,7 +63,7 @@ class SessionManager {
     /**
      * Vérifie si l'utilisateur est connecté
      * Si non, redirection vers la page login
-     * */
+     */
     void checkLogin(){
         if(!this.isLoggedIn()){
             Intent i = new Intent(_context, LoginActivity.class);
@@ -67,7 +81,7 @@ class SessionManager {
 
     /**
      * Vide les détails de l'utilisateur
-     * */
+     */
     void logoutUser(){
         // Vide les préférences de Shared Preferences
         editor.clear();
@@ -86,18 +100,20 @@ class SessionManager {
 
     /**
      * Récupération de l'état de IS_LOGIN
-     * **/
+     * @return true si l'utilisateur est connecté, false sinon
+     */
     boolean isLoggedIn(){
         return pref.getBoolean(IS_LOGIN, false);
     }
 
     /**
-     * Récupération de l'état de IS_LOGIN
-     * **/
+     * Set l'utilisateur comme administrateur
+     */
     void setAdmin() { editor.putBoolean(IS_ADMIN, true); editor.commit(); }
 
     /**
      * Récupération de l'état de IS_ADMIN
-     * **/
+     * @return true si l'utilisateur est administrateur, false sinon
+     */
     boolean isAdmin() { return pref.getBoolean(IS_ADMIN, false); }
 }

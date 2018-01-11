@@ -25,10 +25,24 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Cette class implémente le controlleur de la vue du planning
+ * @author François ADINOLFI Loïc DUFEIL Jessica MARTINEZ Nicolas BROSSE
+ */
 public class PlanningActivity extends AppCompatActivity {
+    /**
+     * Variable session de l'application
+     */
     private SessionManager session;
+    /**
+     * Formatage des nombres des heures et dates
+     */
     DecimalFormat formater = new DecimalFormat("00");
 
+    /**
+     * Méthode appelé à la création de l'activité
+     * @param savedInstanceState état de l'instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +138,11 @@ public class PlanningActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Méthode appelé à la création de l'activité pour construire le menu
+     * @param menu menu de l'activité
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -131,6 +150,11 @@ public class PlanningActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Méthode qui implémente les boutons du menu
+     * @param item item sélectionné dans le menu
+     * @return true
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
@@ -185,6 +209,10 @@ public class PlanningActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Méthode qui implémente le boutton retour du menu
+     * @return true
+     */
     @Override
     public boolean onSupportNavigateUp() {
         Intent intent = new Intent(PlanningActivity.this, MainActivity.class);
@@ -193,7 +221,13 @@ public class PlanningActivity extends AppCompatActivity {
         return true;
     }
 
-    /* Retourne une liste de tous les événements à une date donnée */
+    /**
+     * Méthode qui récupère les événements à une date donnée
+     * @param year année de la date
+     * @param month mois de la date
+     * @param dayOfMonth jour de la date
+     * @return liste des événements
+     */
     public List<Event> getEventsAtDate(int year, int month, int dayOfMonth){
         List<Event> eventListAtDate = new ArrayList<>();
         for(Event e : Bdd.getEventList(session.getUserDetails().get(SessionManager.KEY_ID))){
@@ -204,6 +238,11 @@ public class PlanningActivity extends AppCompatActivity {
         return eventListAtDate;
     }
 
+    /**
+     * Méthode qui crée l'adaptateur pour la liste des événements de la vue
+     * @param eventListAtDate liste des événement à la date séléctionné
+     * @return l'adaptateur
+     */
     public SimpleAdapter createAdaptater(List<Event> eventListAtDate){
         ArrayList<HashMap<String,String>> list = new ArrayList<>();
         HashMap<String,String> item;

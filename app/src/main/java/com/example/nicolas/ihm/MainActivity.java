@@ -9,9 +9,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
+/**
+ * Cette class implémente le controlleur de la vue de la page d'accueil de l'application
+ * @author François ADINOLFI Loïc DUFEIL Jessica MARTINEZ Nicolas BROSSE
+ */
 public class MainActivity extends AppCompatActivity {
+    /**
+     * Variable session de l'application
+     */
     private SessionManager session;
 
+    /**
+     * Méthode appelé à la création de l'activité
+     * @param savedInstanceState état de l'instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,12 +59,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Méthode appelé à la création de l'activité pour construire le menu
+     * @param menu menu de l'activité
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
+    /**
+     * Méthode qui implémente les boutons du menu
+     * @param item item sélectionné dans le menu
+     * @return true
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){

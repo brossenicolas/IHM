@@ -9,11 +9,28 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Cette class implémente le controlleur de la vue de connexion d'un compte utilisateur
+ * @author François ADINOLFI Loïc DUFEIL Jessica MARTINEZ Nicolas BROSSE
+ */
 public class LoginActivity extends AppCompatActivity {
+    /**
+     * Variable session de l'application
+     */
     private SessionManager session;
+    /**
+     * Champs nom de la vue
+     */
     private EditText inputName;
+    /**
+     * Champs mot de passe de la vue
+     */
     private EditText inputPassword;
 
+    /**
+     * Méthode appelé à la création de l'activité
+     * @param savedInstanceState état de l'instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
